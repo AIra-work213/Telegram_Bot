@@ -13,8 +13,21 @@ transforms = tfs_v2.Compose([
 class Model(torch.nn.Module):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.layers = torch.nn.Sequential(
+            torch.nn.Conv2d(3, 20, 3, 1, 1, bias=False),
+            torch.nn.MaxPool2d(3),
+            torch.nn.BatchNorm2d(20),
+            torch.nn.Conv2d(20, 50, 3, 1, 1, bias=True),
+            torch.nn.Conv2d(50, 200, 3, 1, 1, bias=False),
+            torch.nn.MaxPool2d(5),
+            torch.nn.BatchNorm2d(200),
+            torch.nn.Flatten(),
+            torch.nn.Linear(20000, 10000),
+            torch.nn.Linear(10000, 6)
+        )
+
     def forward(self, x):
-        return x
+        return self.layers(x)
 
 
 class Dataset(torch.utils.data.Dataset):
