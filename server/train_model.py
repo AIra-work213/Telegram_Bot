@@ -2,6 +2,7 @@ import torch
 import torchvision.transforms.v2 as tfs_v2
 import PIL.Image as img
 import random as rd
+from tqdm import tqdm
 
 transforms = tfs_v2.Compose([
     tfs_v2.Resize((150, 150)),
@@ -63,3 +64,20 @@ for_test = Dataset(False)
 
 train_data = torch.utils.data.DataLoader(for_train, batch_size=10, shuffle=True)
 test_data = torch.utils.data.DataLoader(for_test, batch_size=10, shuffle=True)
+
+model = Model()
+
+optimizator = torch.optim.Adam(model.parameters(), weight_decay=0.01)
+loss_func = torch.nn.CrossEntropyLoss()
+
+epochs = 10
+
+for e in range(epochs):
+    train_data_tqdm = tqdm(train_data, f'Эпоха: {e}/{epochs}')
+    for x, y in train_data:
+        y_pred = model(x)
+        loss = loss_func(y, y_pred)
+
+        optimizator.zero_grad()
+        loss.backward()
+        optimizator.step()
