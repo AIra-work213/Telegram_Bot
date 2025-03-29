@@ -2,8 +2,14 @@ services:
   server:
     build: /server
     image: server
+    networks:
+      - MyNetwork
+    ports:
+      - "10000:8000"
   bot:
     build: /TG_bot
     image: bot
+    networks:
+      - MyNetworks
     depends_on:
       - server
