@@ -1,0 +1,9 @@
+services:
+  server:
+    build: /server
+    image: server
+  bot:
+    build: /TG_bot
+    image: bot
+    depends_on:
+      - server
